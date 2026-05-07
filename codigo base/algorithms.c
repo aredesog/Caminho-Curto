@@ -7,7 +7,6 @@ double dijkstra(int **matriz, int num_nos, int origem) {
     double custo = 0;
     //Algoritimo guloso
 
-// --- PREPARAÇÃO ---
     // Comecar o array de distancia (infinito, origem no 0)
     // Comecar array de visitados (falso)
 
