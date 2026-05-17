@@ -11,7 +11,7 @@ O objetivo deste projeto é implementar e avaliar empiricamente algoritmos de ca
 O projeto contempla a avaliação de três algoritmos distintos:
 1. **Algoritmo de Duan:** Implementação e caracterização empírica deste novo algoritmo (2025).
 2. **Algoritmo de Dijkstra:** Implementação do algoritmo clássico.
-3. **[...]:** A decidir...
+3. **Algoritmo de Dial:** Implementação do algoritmo de Dial para comparação de desempenho.
 
 ## Detalhes Técnicos e Testes
 * **Linguagem:** Desenvolvido em C.
