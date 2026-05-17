@@ -5,6 +5,13 @@
 #include <stdbool.h>
 
 #define INF INT_MAX
+#define MAX_PESO 100
+
+// Estrutura simples de nó para a lista encadeada dos buckets
+typedef struct Node {
+    int vertice;
+    struct Node* prox;
+} Node;
 
 // Executa o algoritmo de Dijkstra a partir de um nó de origem
 double dijkstra(int **matriz, int num_nos, int origem);
@@ -12,7 +19,7 @@ double dijkstra(int **matriz, int num_nos, int origem);
 // Executa o algoritmo de Duan a partir de um nó de origem
 double duan(int **matriz, int num_nos, int origem);
 
-// Executa o terceiro algoritmo a partir de um nó de origem
+// Executa o algoritmo de Dial a partir de um nó de origem
 double outro(int **matriz, int num_nos, int origem);
 
 #endif

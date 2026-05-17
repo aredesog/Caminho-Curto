@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
     fim = clock();
     
     tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
-    printf("Outro: %f %f\n", cost,tempo_gasto);
+    printf("Dial: %f %f\n", cost,tempo_gasto);
 
     // Limpeza
     liberar_grafo(grafo);

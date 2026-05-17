@@ -190,15 +190,146 @@ double duan(int **matriz, int num_nos, int origem) {
     return custo; //Retorna soma das distâncias.
 }
 
-// Implementação do terceiro usando matriz de adjacência
+// Algoritmo de Dial usando matriz de adjacência
 double outro(int **matriz, int num_nos, int origem) {
     double custo = 0;
 
-    /***********************
-    ***********************
-     Implementar código aqui
-    ************************
-    ***********************/
+    // Vetor de distâncias mínimas.
+    int *dist = (int *)malloc(num_nos * sizeof(int));
+    // Marca quais vértices já foram processados.
+    bool *processado = (bool *)calloc(num_nos, sizeof(bool));
+    // Quantidade de buckets.
+    int num_baldes = MAX_PESO + 1;
+    // Vetor de listas encadeadas (buckets).
+    Node **baldes = (Node **)calloc(num_baldes, sizeof(Node *));
+
+    // Verifica falha de memória.
+    if (dist == NULL || processado == NULL || baldes == NULL) {
+        free(dist);
+        free(processado);
+        free(baldes);
+
+        return custo;
+    }
+
+    // Inicializa todas as distâncias como infinito.
+    for (int i = 0; i < num_nos; i++) {
+        dist[i] = INF;
+    }
+
+    // Distância da origem para ela mesma é 0.
+    dist[origem] = 0;
+
+    // Cria nó inicial da origem.
+    Node *inicio = (Node *)malloc(sizeof(Node));
+    if (inicio == NULL) {
+        free(dist);
+        free(processado);
+        free(baldes);
+
+        return custo;
+    }
+
+    // Coloca a origem no bucket 0.
+    inicio->vertice = origem;
+    inicio->prox = NULL;
+
+    baldes[0] = inicio;
+
+    // Quantidade de vértices presentes nos buckets.
+    int ativos = 1;
+
+    // Distância atual sendo analisada.
+    int distancia_atual = 0;
+
+    // Continua enquanto houver vértices nos buckets.
+    while (ativos > 0) {
+        // Procura o próximo bucket não vazio.
+        while (baldes[distancia_atual % num_baldes] == NULL) {
+            distancia_atual++;
+            custo++;
+        }
+
+        // Remove um vértice do bucket atual.
+        int indice_balde = distancia_atual % num_baldes;
+        Node *temp = baldes[indice_balde];
+        baldes[indice_balde] = temp->prox;
+        int u = temp->vertice;
+
+        free(temp);
+        ativos--;
+        custo++;
+
+        // Ignora caso o vértice já tenha sido processado.
+        if (processado[u]) {
+            continue;
+        }
+
+        // Marca o vértice como processado.
+        processado[u] = true;
+        custo++;
+
+        // Segurança extra.
+        if (dist[u] == INF) {
+            continue;
+        }
+
+        // Percorre todos os vizinhos de u.
+        for (int v = 0; v < num_nos; v++) {
+            custo++;
+
+            int peso = matriz[u][v];
+            // Existe aresta entre u e v.
+            if (peso > 0) {
+                // Calcula possível nova distância.
+                int nova_dist = dist[u] + peso;
+                // Relaxamento.
+                if (nova_dist < dist[v]) {
+                    // Atualiza a menor distância.
+                    dist[v] = nova_dist;
+                    custo++;
+
+                    // Cria novo nó para inserir no bucket.
+                    Node *novo = (Node *)malloc(sizeof(Node));
+                    if (novo != NULL) {
+                        // Define o bucket de destino.
+                        int balde_destino = nova_dist % num_baldes;
+                        novo->vertice = v;
+
+                        // Insere no início da lista do bucket.
+                        novo->prox = baldes[balde_destino];
+                        baldes[balde_destino] = novo;
+
+                        ativos++;
+                        custo++;
+                    }
+                }
+            }
+        }
+    }
+
+    // Soma as distâncias encontradas.
+    for (int i = 0; i < num_nos; i++) {
+        if (dist[i] != INF) {
+            custo += dist[i];
+        }
+    }
+
+    // Libera memória dos buckets.
+    for (int i = 0; i < num_baldes; i++) {
+        Node *atual = baldes[i];
+
+        while (atual != NULL) {
+            Node *proximo = atual->prox;
+            free(atual);
+            atual = proximo;
+        }
+    }
+
+    // Libera memória auxiliar.
+    free(dist);
+    free(processado);
+    free(baldes);
 
     /* Esta retorno também é obrigatório e não deve ser retirado*/  
     return custo;
